@@ -61,7 +61,7 @@ let controller = {
             .then(data=>res.json(data));
     },
     get: (req, res, next) => {
-        User.findOne({_id:req.user.sub}, {password: 0})
+        User.findOne({_id:req.param('id')}, {password: 0})
             .then(data=>{res.json(data)})
             .catch(err=>{res.json(err)}) 
     },
