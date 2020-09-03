@@ -1,6 +1,7 @@
 const error_types   = require('./error_types');
 const Service       = require('../Models/service');
 const Request       = require('../Models/request');
+const Work          = require('../Models/work');
 
 let controller = {
     create: (req, res, next) => {
@@ -79,6 +80,24 @@ let controller = {
                        res.json(request);
                     }
                 });
+    }, 
+    stats: (req, res, next) =>{
+      Work.aggregate([
+                         {$match: {user_id: req.user.sub}}, 
+                         {$group: {_id: null, total : {$sum: "$time"}}}
+             ])
+             .then(data=>{
+                 Request.countDocuments({user_id: req.user.sub, status: 'delivered'})
+                     .then(deliveries =>{
+                         let stats = {
+                             numberDeliveries: deliveries, 
+                             TimeWork: data[0].total/60
+                         };
+                         res.json(stats);
+                     })
+                     .catch(res.json(data));
+             })
+             .catch(err=>{res.json(err)});
     }
 }
 

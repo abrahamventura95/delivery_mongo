@@ -1,6 +1,7 @@
 const error_types   = require('./error_types');
 const Service       = require('../Models/service');
 const Permission    = require('../Models/permission');
+const Work          = require('../Models/work');
 
 let controller = {
     create: (req, res, next) => {
@@ -33,6 +34,14 @@ let controller = {
                                     data.status = req.body.status || data.status;
                                     data.updated_at = Date.now();
                                     data.save();
+                                    if(!data.status){
+                                      let document = new Work({
+                                         user_id: data.user_id,
+                                         service_id: data.service_id,
+                                         time: Date.now() - data.updated_at
+                                      });
+                                      document.save();
+                                    }
                                     res.json(data)
                                   })
                                   .catch(err=>{res.json(err)}) 

@@ -24,4 +24,5 @@ router.get('/request/manager', auth.ensureAuthenticated, auth.isDelivery, Reques
 router.put('/request', auth.ensureAuthenticated, Request.update);
 router.delete('/request', auth.ensureAuthenticated,  Request.delete);
 
+router.get('/stats', auth.ensureAuthenticated, Request.stats);
 module.exports = router;
