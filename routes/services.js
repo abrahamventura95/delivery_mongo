@@ -1,6 +1,7 @@
 var express 		= require('express');
 var router 			= express.Router();
 var auth 			= require('../middleware/auth');
+var Request 		= require('../controllers/request');
 var Controller 		= require('../controllers/service');
 var Permission 		= require('../controllers/permission');
 
@@ -16,5 +17,11 @@ router.get('/permission', auth.ensureAuthenticated, auth.isDelivery, Permission.
 router.put('/permission', auth.ensureAuthenticated, auth.isDelivery, Permission.update);
 router.delete('/permission', auth.ensureAuthenticated, auth.isDelivery, Permission.delete);
 
+router.post('/request', auth.ensureAuthenticated, Request.create);
+router.get('/request/user', auth.ensureAuthenticated, Request.getU);
+router.get('/request/service', auth.ensureAuthenticated, auth.isDelivery, Request.getS);
+router.get('/request/manager', auth.ensureAuthenticated, auth.isDelivery, Request.getM);
+router.put('/request', auth.ensureAuthenticated, Request.update);
+router.delete('/request', auth.ensureAuthenticated,  Request.delete);
 
 module.exports = router;
